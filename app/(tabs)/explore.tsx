@@ -106,6 +106,24 @@ const categories = [
   },
   {
     id: 12,
+    title: 'Cooking & Meal Preparation',
+    description: 'Home-cooked meals, dietary restrictions, meal planning, and kitchen assistance.',
+    icon: 'restaurant',
+    color: '#FF6B35',
+    providers: 31,
+    rating: 4.7,
+  },
+  {
+    id: 13,
+    title: 'House Maid / Domestic Help',
+    description: 'Cleaning, laundry, general household chores, and home maintenance.',
+    icon: 'home',
+    color: '#4ECDC4',
+    providers: 45,
+    rating: 4.6,
+  },
+  {
+    id: 14,
     title: 'Mental Health Services',
     description: 'Trained companions, therapists, or even video calls for mental wellness.',
     icon: 'heart',
@@ -114,7 +132,7 @@ const categories = [
     rating: 4.8,
   },
   {
-    id: 13,
+    id: 15,
     title: 'Religious and Spiritual Support',
     description: 'Virtual or home visits by priests, access to online satsangs or poojas.',
     icon: 'sparkles',
@@ -123,7 +141,7 @@ const categories = [
     rating: 4.5,
   },
   {
-    id: 14,
+    id: 16,
     title: 'Pet Care Assistance',
     description: 'For elderly pet owners — feeding, walking, vet visits, grooming, etc.',
     icon: 'paw',
