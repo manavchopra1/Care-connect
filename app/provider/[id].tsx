@@ -1,73 +1,86 @@
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Linking from 'expo-linking';
+import { useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import React, { useState } from 'react';
-import { Alert, Image, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+    Alert,
+    Dimensions,
+    Image,
+    Modal,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import { useFavorites } from '../../components/FavoritesContext';
-import { useThemeColor } from '../../hooks/useThemeColor';
 
-// Mock provider data (in real app, fetch by id)
-const providers = [
-  {
-    id: 1,
-    name: 'Dr. Olivia Smith',
-    rating: 4.8,
-    reviews: 124,
-    location: 'San Francisco, CA',
-    services: ['Elderly Care', 'Nursing'],
-    price: 25,
-    available: true,
-    verified: true,
-    image: 'https://randomuser.me/api/portraits/women/44.jpg',
-    bio: 'Experienced caregiver with a passion for helping seniors live their best lives. CPR certified and fluent in Spanish.',
-    gallery: [
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9',
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
-    ],
-    reviewsList: [
-      { name: 'Priya Patel', rating: 5, text: 'Sarah is amazing with my grandmother!' },
-      { name: 'Michael Chen', rating: 4.5, text: 'Very professional and caring.' },
-    ],
-    employmentType: 'Full-Time',
-    gender: 'Female',
-    languages: ['English', 'Spanish'],
-    specialty: 'Elderly Care',
-    certifications: ['CPR Certified', 'First Aid Certified'],
-    specialties: ['Elderly Care', 'Nursing'],
-    email: 'olivia.smith@example.com',
-    phone: '+1-555-123-4567',
-  },
-  // ...add more providers as needed
-];
+const { width } = Dimensions.get('window');
+
+// Mock provider data
+const provider = {
+  id: 1,
+  name: 'Dr. Sarah Johnson',
+  image: 'https://randomuser.me/api/portraits/women/44.jpg',
+  specialty: 'Registered Nurse',
+  rating: 4.8,
+  reviews: 127,
+  price: 45,
+  location: 'New York, NY',
+  experience: '8 years',
+  bio: 'Experienced registered nurse specializing in home healthcare, post-surgery care, and elderly assistance. Certified in wound care and medication management.',
+  employmentType: 'Full-Time',
+  gender: 'Female',
+  languages: ['English', 'Spanish'],
+  serviceType: 'Home Healthcare',
+  certifications: ['RN License', 'Wound Care Certified', 'CPR Certified'],
+  email: 'sarah.johnson@email.com',
+  phone: '+1 (555) 123-4567',
+  gallery: [
+    'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400',
+    'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400',
+    'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400',
+  ],
+  reviewsList: [
+    { id: 1, name: 'Maria G.', rating: 5, text: 'Excellent care for my mother. Very professional and caring.', date: '2 days ago' },
+    { id: 2, name: 'John D.', rating: 5, text: 'Sarah is amazing! She helped my dad recover after surgery.', date: '1 week ago' },
+    { id: 3, name: 'Lisa M.', rating: 4, text: 'Great experience. Very knowledgeable and patient.', date: '2 weeks ago' },
+  ],
+  availability: 'Available Now',
+  verified: true,
+  responseTime: '< 2 hours',
+  completionRate: '98%',
+};
 
 export default function ProviderDetailScreen({ route, navigation }: any) {
-  // In a real app, get id from route.params and fetch provider
-  const provider = providers[0];
-  const { isFavorite, toggleFavorite } = useFavorites();
-
+  const router = useRouter();
+  const { toggleFavorite, isFavorite } = useFavorites();
   const [modalVisible, setModalVisible] = useState(false);
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
-  const [mode, setMode] = useState<'date' | 'time'>('date');
-  const [confirmed, setConfirmed] = useState(false);
   const [reviewModal, setReviewModal] = useState(false);
-  const [reviewText, setReviewText] = useState('');
-  const [reviewRating, setReviewRating] = useState(0);
-  const [reviews, setReviews] = useState(provider.reviewsList);
   const [paymentModal, setPaymentModal] = useState(false);
-  const [cardNumber, setCardNumber] = useState('');
-  const [cardExpiry, setCardExpiry] = useState('');
-  const [cardCVC, setCardCVC] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   const onChange = (event: any, selectedDate?: Date) => {
-    setShowPicker(false);
-    if (selectedDate) setDate(selectedDate);
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    setShowDatePicker(false);
+    setShowTimePicker(false);
   };
 
   const openPicker = (pickerMode: 'date' | 'time') => {
-    setMode(pickerMode);
-    setShowPicker(true);
+    if (pickerMode === 'date') {
+      setShowDatePicker(true);
+    } else {
+      setShowTimePicker(true);
+    }
   };
 
   const handleBook = () => {
@@ -77,292 +90,349 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
 
   const handlePay = () => {
     setPaymentModal(false);
-    setCardNumber('');
-    setCardExpiry('');
-    setCardCVC('');
-    Alert.alert('Payment Successful', 'Your booking has been confirmed!');
+    Alert.alert('Booking Confirmed!', 'Your appointment has been scheduled successfully.');
   };
 
   const handleSubmitReview = () => {
-    if (reviewRating === 0 || !reviewText.trim()) {
-      Alert.alert('Please provide a rating and review text.');
-      return;
-    }
-    setReviews([
-      { name: 'You', rating: reviewRating, text: reviewText },
-      ...reviews,
-    ]);
     setReviewModal(false);
     setReviewText('');
-    setReviewRating(0);
-    Alert.alert('Thank you!', 'Your review has been submitted.');
+    Alert.alert('Review Submitted!', 'Thank you for your feedback.');
   };
 
   const handleContact = () => {
-    if (provider.email) {
-      Linking.openURL(`mailto:${provider.email}`);
-    } else if (provider.phone) {
-      Linking.openURL(`tel:${provider.phone}`);
-    } else {
-      Alert.alert('No contact info available');
-    }
+    Linking.openURL(`tel:${provider.phone}`);
   };
+
   const handleShare = async () => {
-    if (Sharing.isAvailableAsync()) {
-      await Sharing.shareAsync(undefined, { dialogTitle: `Share ${provider.name}'s profile` });
-    } else {
-      Alert.alert('Sharing not available');
+    try {
+      await Sharing.shareAsync('https://careconnect.app/provider/1', {
+        mimeType: 'text/plain',
+        dialogTitle: 'Share Provider Profile',
+      });
+    } catch (error) {
+      console.log('Error sharing:', error);
     }
   };
 
-  const backgroundColor = useThemeColor({}, 'background');
-  const cardColor = useThemeColor({}, 'card');
-  const textColor = useThemeColor({}, 'text');
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Ionicons
+        key={i}
+        name={i < rating ? 'star' : 'star-outline'}
+        size={16}
+        color={i < rating ? '#FFD700' : '#ccc'}
+      />
+    ));
+  };
 
   return (
-    <View style={{ flex: 1, backgroundColor }}>
-      <ScrollView style={{ backgroundColor }} contentContainerStyle={{ paddingBottom: 32 }}>
-        <TouchableOpacity onPress={() => toggleFavorite(provider.id)} style={{ position: 'absolute', top: 32, right: 24, zIndex: 10 }}>
-          <Ionicons name={isFavorite(provider.id) ? 'heart' : 'heart-outline'} size={32} color="#F44336" />
-        </TouchableOpacity>
-        <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ height: 220, marginBottom: 16 }}>
-          {provider.gallery && provider.gallery.length > 0 ? provider.gallery.map((img, idx) => (
-            <Image key={idx} source={{ uri: img }} style={{ width: 340, height: 220, borderRadius: 16, marginRight: 12 }} />
-          )) : (
-            <Image source={{ uri: provider.image }} style={{ width: 340, height: 220, borderRadius: 16 }} />
-          )}
-        </ScrollView>
-        <View style={styles.headerRow}>
-          <View style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={[styles.providerName, { color: textColor }]}>{provider.name}</Text>
-              <Ionicons name="checkmark-circle" size={18} color="#4CAF50" style={{ marginLeft: 4 }} />
-            </View>
-            {/* Remove styles.rating and styles.location if not defined */}
-            <Text style={{ color: textColor, fontSize: 15 }}>{provider.specialty}</Text>
-            <Text style={{ color: textColor, fontSize: 14 }}>{provider.location}</Text>
-          </View>
-          {/* ...rest of code... */}
-        </View>
-        <View style={{ flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap' }}>
-          {provider.certifications?.map((cert, idx) => (
-            <View key={idx} style={{ backgroundColor: '#E0E0E0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, marginRight: 8, marginBottom: 6 }}>
-                              <Text style={{ color: '#5B9BD5', fontWeight: '600' }}>{cert}</Text>
-            </View>
-          ))}
-          {provider.specialties?.map((spec, idx) => (
-            <View key={idx} style={{ backgroundColor: '#F1F1FA', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, marginRight: 8, marginBottom: 6 }}>
-              <Text style={{ color: '#222', fontWeight: '600' }}>{spec}</Text>
-            </View>
-          ))}
-          {provider.languages?.map((lang, idx) => (
-            <View key={idx} style={{ backgroundColor: '#FFF3E0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, marginRight: 8, marginBottom: 6 }}>
-              <Text style={{ color: '#FF9800', fontWeight: '600' }}>{lang}</Text>
-            </View>
-          ))}
-        </View>
-        <View style={{ flexDirection: 'row', marginTop: 12 }}>
-                          <TouchableOpacity style={{ backgroundColor: '#5B9BD5', borderRadius: 10, paddingVertical: 12, paddingHorizontal: 20, marginRight: 12 }} onPress={handleContact}>
-            <Text style={{ color: '#fff', fontWeight: '600', fontSize: 16 }}>Contact Provider</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ backgroundColor: '#F1F1FA', borderRadius: 10, paddingVertical: 12, paddingHorizontal: 20 }} onPress={handleShare}>
-                          <Text style={{ color: '#5B9BD5', fontWeight: '600', fontSize: 16 }}>Share Profile</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.row}>
-          <Ionicons name="star" size={16} color="#FFD700" />
-          <Text style={styles.rating}>{provider.rating} ({provider.reviews})</Text>
-          <Ionicons name="location-outline" size={16} color="#888" style={{ marginLeft: 8 }} />
-          <Text style={styles.location}>{provider.location}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <View style={styles.infoBox}>
-                            <Ionicons name="briefcase-outline" size={18} color="#5B9BD5" />
-            <Text style={styles.infoLabel}>{provider.employmentType}</Text>
-          </View>
-          <View style={styles.infoBox}>
-                            <Ionicons name="person-outline" size={18} color="#5B9BD5" />
-            <Text style={styles.infoLabel}>{provider.gender}</Text>
-          </View>
-          <View style={styles.infoBox}>
-                            <Ionicons name="language-outline" size={18} color="#5B9BD5" />
-            <Text style={styles.infoLabel}>{provider.languages.join(', ')}</Text>
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Hero Section */}
+        <View style={styles.heroSection}>
+          <Image source={{ uri: provider.image }} style={styles.heroImage} />
+          <View style={styles.heroOverlay}>
+            <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.favoriteButton} 
+              onPress={() => toggleFavorite(provider.id)}
+            >
+              <Ionicons 
+                name={isFavorite(provider.id) ? 'heart' : 'heart-outline'} 
+                size={24} 
+                color={isFavorite(provider.id) ? '#FF6B6B' : 'white'} 
+              />
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.priceRow}>
-          <Text style={styles.price}>${provider.price}/hr</Text>
-          <Text style={[styles.availability, { color: provider.available ? '#4CAF50' : '#F44336' }]}> 
-            {provider.available ? 'Available Now' : 'Unavailable'}
-          </Text>
+
+        {/* Profile Info */}
+        <View style={styles.profileSection}>
+          <View style={styles.nameRow}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.providerName}>{provider.name}</Text>
+              <Text style={styles.specialty}>{provider.specialty}</Text>
+            </View>
+            <View style={styles.priceContainer}>
+              <Text style={styles.price}>${provider.price}</Text>
+              <Text style={styles.priceUnit}>/hr</Text>
+            </View>
+          </View>
+
+          {/* Rating and Stats */}
+          <View style={styles.ratingRow}>
+            <View style={styles.ratingContainer}>
+              <View style={styles.starsContainer}>
+                {renderStars(provider.rating)}
+              </View>
+              <Text style={styles.ratingText}>{provider.rating}</Text>
+              <Text style={styles.reviewsCount}>({provider.reviews} reviews)</Text>
+            </View>
+            <View style={styles.verifiedBadge}>
+              <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+              <Text style={styles.verifiedText}>Verified</Text>
+            </View>
+          </View>
+
+          {/* Quick Stats */}
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <Ionicons name="time-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.statValue}>{provider.responseTime}</Text>
+              <Text style={styles.statLabel}>Response</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Ionicons name="checkmark-circle-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.statValue}>{provider.completionRate}</Text>
+              <Text style={styles.statLabel}>Completion</Text>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.statItem}>
+              <Ionicons name="briefcase-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.statValue}>{provider.experience}</Text>
+              <Text style={styles.statLabel}>Experience</Text>
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.primaryButton} onPress={() => setModalVisible(true)}>
+              <Ionicons name="calendar-outline" size={20} color="white" />
+              <Text style={styles.primaryButtonText}>Book Now</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.secondaryButton} onPress={handleContact}>
+              <Ionicons name="call-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.secondaryButtonText}>Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.secondaryButton} onPress={handleShare}>
+              <Ionicons name="share-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.secondaryButtonText}>Share</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <Text style={styles.bio}>{provider.bio}</Text>
+
+        {/* About Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Services</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            {provider.services.map(service => (
-              <View key={service} style={styles.tag}>
-                <Text style={styles.tagText}>{service}</Text>
+          <Text style={styles.sectionTitle}>About</Text>
+          <Text style={styles.bioText}>{provider.bio}</Text>
+        </View>
+
+        {/* Details Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Details</Text>
+          <View style={styles.detailsGrid}>
+            <View style={styles.detailItem}>
+              <Ionicons name="location-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.detailLabel}>Location</Text>
+              <Text style={styles.detailValue}>{provider.location}</Text>
+            </View>
+            <View style={styles.detailItem}>
+              <Ionicons name="person-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.detailLabel}>Gender</Text>
+              <Text style={styles.detailValue}>{provider.gender}</Text>
+            </View>
+            <View style={styles.detailItem}>
+              <Ionicons name="briefcase-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.detailLabel}>Employment</Text>
+              <Text style={styles.detailValue}>{provider.employmentType}</Text>
+            </View>
+            <View style={styles.detailItem}>
+              <Ionicons name="language-outline" size={20} color="#5B9BD5" />
+              <Text style={styles.detailLabel}>Languages</Text>
+              <Text style={styles.detailValue}>{provider.languages.join(', ')}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Certifications */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Certifications</Text>
+          <View style={styles.certificationsContainer}>
+            {provider.certifications.map((cert, idx) => (
+              <View key={idx} style={styles.certificationTag}>
+                <Ionicons name="checkmark-circle" size={16} color="#4CAF50" />
+                <Text style={styles.certificationText}>{cert}</Text>
               </View>
             ))}
           </View>
         </View>
+
+        {/* Gallery */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Gallery</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 8 }}>
-            {provider.gallery.map((img, idx) => (
-              <Image key={idx} source={{ uri: img }} style={styles.galleryImg} />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.galleryContainer}>
+            {provider.gallery.map((image, index) => (
+              <TouchableOpacity key={index} onPress={() => setSelectedImage(index)}>
+                <Image source={{ uri: image }} style={styles.galleryImage} />
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </View>
+
+        {/* Reviews */}
         <View style={styles.section}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <View style={styles.reviewsHeader}>
             <Text style={styles.sectionTitle}>Reviews</Text>
-            <TouchableOpacity style={styles.leaveReviewBtn} onPress={() => setReviewModal(true)}>
-                              <Ionicons name="create-outline" size={18} color="#5B9BD5" />
-              <Text style={styles.leaveReviewText}>Leave a Review</Text>
+            <TouchableOpacity style={styles.leaveReviewButton} onPress={() => setReviewModal(true)}>
+              <Ionicons name="create-outline" size={18} color="#5B9BD5" />
+              <Text style={styles.leaveReviewText}>Leave Review</Text>
             </TouchableOpacity>
           </View>
-          {reviews.map((review, idx) => (
-            <View key={idx} style={styles.reviewBox}>
-              <Text style={styles.reviewName}>{review.name}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
-                <Ionicons name="star" size={14} color="#FFD700" />
-                <Text style={styles.reviewRating}>{review.rating}</Text>
+          {provider.reviewsList.map((review) => (
+            <View key={review.id} style={styles.reviewCard}>
+              <View style={styles.reviewHeader}>
+                <Text style={styles.reviewName}>{review.name}</Text>
+                <View style={styles.reviewRating}>
+                  {renderStars(review.rating)}
+                </View>
               </View>
               <Text style={styles.reviewText}>{review.text}</Text>
+              <Text style={styles.reviewDate}>{review.date}</Text>
             </View>
           ))}
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.floatingBookBtn} onPress={() => setModalVisible(true)} activeOpacity={0.9}>
-        <Text style={styles.bookBtnText}>Book Now</Text>
-      </TouchableOpacity>
+
+      {/* Floating Book Button */}
+      <View style={styles.floatingButtonContainer}>
+        <TouchableOpacity style={styles.floatingButton} onPress={() => setModalVisible(true)}>
+          <Ionicons name="calendar-outline" size={24} color="white" />
+          <Text style={styles.floatingButtonText}>Book ${provider.price}/hr</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* Booking Modal */}
-      <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setModalVisible(false)}
-      >
+      <Modal visible={modalVisible} animationType="slide" transparent onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            {confirmed ? (
-              <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                <Ionicons name="checkmark-circle" size={48} color="#4CAF50" />
-                <Text style={{ fontSize: 20, fontWeight: '600', color: '#222', marginTop: 12 }}>Booking Confirmed!</Text>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Book {provider.name}</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.modalBody}>
+              <TouchableOpacity style={styles.pickerButton} onPress={() => openPicker('date')}>
+                <Ionicons name="calendar-outline" size={20} color="#5B9BD5" />
+                <Text style={styles.pickerButtonText}>Select Date: {date.toLocaleDateString()}</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.pickerButton} onPress={() => openPicker('time')}>
+                <Ionicons name="time-outline" size={20} color="#5B9BD5" />
+                <Text style={styles.pickerButtonText}>Select Time: {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+              </TouchableOpacity>
+
+              <View style={styles.bookingSummary}>
+                <Text style={styles.summaryTitle}>Booking Summary</Text>
+                <View style={styles.summaryRow}>
+                  <Text style={styles.summaryLabel}>Provider:</Text>
+                  <Text style={styles.summaryValue}>{provider.name}</Text>
+                </View>
+                <View style={styles.summaryRow}>
+                  <Text style={styles.summaryLabel}>Rate:</Text>
+                  <Text style={styles.summaryValue}>${provider.price}/hour</Text>
+                </View>
+                <View style={styles.summaryRow}>
+                  <Text style={styles.summaryLabel}>Date:</Text>
+                  <Text style={styles.summaryValue}>{date.toLocaleDateString()}</Text>
+                </View>
+                <View style={styles.summaryRow}>
+                  <Text style={styles.summaryLabel}>Time:</Text>
+                  <Text style={styles.summaryValue}>{date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+                </View>
               </View>
-            ) : (
-              <>
-                <Text style={{ fontSize: 20, fontWeight: '700', color: '#222', marginBottom: 18 }}>Book {provider.name}</Text>
-                <TouchableOpacity style={styles.pickerBtn} onPress={() => openPicker('date')}>
-                  <Ionicons name="calendar-outline" size={20} color="#5B9BD5" />
-                  <Text style={styles.pickerBtnText}>Select Date: {date.toLocaleDateString()}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.pickerBtn} onPress={() => openPicker('time')}>
-                  <Ionicons name="time-outline" size={20} color="#5B9BD5" />
-                  <Text style={styles.pickerBtnText}>Select Time: {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-                </TouchableOpacity>
-                {showPicker && (
-                  <DateTimePicker
-                    value={date}
-                    mode={mode}
-                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                    onChange={onChange}
-                  />
-                )}
-                <TouchableOpacity style={styles.confirmBtn} onPress={handleBook}>
-                  <Text style={styles.confirmBtnText}>Confirm & Pay</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.cancelBtn} onPress={() => setModalVisible(false)}>
-                  <Text style={styles.cancelBtnText}>Cancel</Text>
-                </TouchableOpacity>
-              </>
-            )}
+
+              <TouchableOpacity style={styles.bookButton} onPress={handleBook}>
+                <Text style={styles.bookButtonText}>Confirm Booking</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
+
       {/* Payment Modal */}
       <Modal visible={paymentModal} animationType="slide" transparent onRequestClose={() => setPaymentModal(false)}>
         <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: cardColor }]}> 
-            <Text style={[styles.modalTitle, { color: textColor }]}>Payment</Text>
-            <TextInput
-              style={[styles.input, { color: textColor, borderColor: cardColor }]}
-              placeholder="Card Number"
-              placeholderTextColor="#888"
-              value={cardNumber}
-              onChangeText={setCardNumber}
-              keyboardType="number-pad"
-              maxLength={16}
-            />
-            <View style={{ flexDirection: 'row', gap: 8 }}>
-              <TextInput
-                style={[styles.input, { flex: 1, color: textColor, borderColor: cardColor }]}
-                placeholder="MM/YY"
-                placeholderTextColor="#888"
-                value={cardExpiry}
-                onChangeText={setCardExpiry}
-                maxLength={5}
-              />
-              <TextInput
-                style={[styles.input, { flex: 1, color: textColor, borderColor: cardColor }]}
-                placeholder="CVC"
-                placeholderTextColor="#888"
-                value={cardCVC}
-                onChangeText={setCardCVC}
-                keyboardType="number-pad"
-                maxLength={4}
-              />
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Payment</Text>
+              <TouchableOpacity onPress={() => setPaymentModal(false)}>
+                <Ionicons name="close" size={24} color="#666" />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.confirmBtn} onPress={handlePay}>
-              <Text style={styles.confirmBtnText}>Pay</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeModalBtn} onPress={() => setPaymentModal(false)}>
-              <Text style={{ color: '#007AFF', fontWeight: 'bold', fontSize: 16 }}>Cancel</Text>
-            </TouchableOpacity>
+            
+            <View style={styles.modalBody}>
+              <Text style={styles.paymentText}>This is a mock payment flow. In a real app, this would integrate with a payment processor.</Text>
+              <TouchableOpacity style={styles.payButton} onPress={handlePay}>
+                <Text style={styles.payButtonText}>Pay ${provider.price}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
+
       {/* Review Modal */}
-      <Modal
-        visible={reviewModal}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setReviewModal(false)}
-      >
+      <Modal visible={reviewModal} animationType="slide" transparent onRequestClose={() => setReviewModal(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={{ fontSize: 20, fontWeight: '700', color: '#222', marginBottom: 18 }}>Leave a Review</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 16 }}>
-              {[1, 2, 3, 4, 5].map(star => (
-                <TouchableOpacity key={star} onPress={() => setReviewRating(star)}>
-                  <Ionicons
-                    name={reviewRating >= star ? 'star' : 'star-outline'}
-                    size={32}
-                    color={reviewRating >= star ? '#FFD700' : '#bbb'}
-                    style={{ marginHorizontal: 2 }}
-                  />
-                </TouchableOpacity>
-              ))}
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Leave a Review</Text>
+              <TouchableOpacity onPress={() => setReviewModal(false)}>
+                <Ionicons name="close" size={24} color="#666" />
+              </TouchableOpacity>
             </View>
-            <TextInput
-              style={styles.reviewInput}
-              placeholder="Write your review..."
-              placeholderTextColor="#888"
-              value={reviewText}
-              onChangeText={setReviewText}
-              multiline
-              numberOfLines={4}
-            />
-            <TouchableOpacity style={styles.confirmBtn} onPress={handleSubmitReview}>
-              <Text style={styles.confirmBtnText}>Submit Review</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelBtn} onPress={() => setReviewModal(false)}>
-              <Text style={styles.cancelBtnText}>Cancel</Text>
-            </TouchableOpacity>
+            
+            <View style={styles.modalBody}>
+              <View style={styles.ratingSelector}>
+                {Array.from({ length: 5 }, (_, i) => (
+                  <TouchableOpacity key={i} onPress={() => setReviewRating(i + 1)}>
+                    <Ionicons
+                      name={i < reviewRating ? 'star' : 'star-outline'}
+                      size={32}
+                      color={i < reviewRating ? '#FFD700' : '#ccc'}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
+              
+              <TextInput
+                style={styles.reviewInput}
+                placeholder="Write your review..."
+                value={reviewText}
+                onChangeText={setReviewText}
+                multiline
+                numberOfLines={4}
+              />
+              
+              <TouchableOpacity style={styles.submitReviewButton} onPress={handleSubmitReview}>
+                <Text style={styles.submitReviewButtonText}>Submit Review</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
+
+      {/* Date/Time Pickers */}
+      {showDatePicker && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChange}
+        />
+      )}
+      {showTimePicker && (
+        <DateTimePicker
+          value={date}
+          mode="time"
+          display="default"
+          onChange={onChange}
+        />
+      )}
     </View>
   );
 }
@@ -371,247 +441,438 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F9FB',
-    paddingHorizontal: 16,
-    paddingTop: 24,
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    alignSelf: 'center',
+  heroSection: {
+    height: 300,
+    position: 'relative',
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  heroOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingTop: 60,
+    paddingHorizontal: 20,
+  },
+  backButton: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 20,
+    padding: 8,
+  },
+  favoriteButton: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 20,
+    padding: 8,
+  },
+  profileSection: {
+    backgroundColor: 'white',
+    padding: 20,
+    marginTop: -20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  nameRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     marginBottom: 16,
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 6,
+  nameContainer: {
+    flex: 1,
   },
-  name: {
-    fontSize: 22,
+  providerName: {
+    fontSize: 28,
     fontWeight: '700',
     color: '#222',
+    marginBottom: 4,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-    marginTop: 2,
-  },
-  infoBox: {
-    flex: 1,
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginHorizontal: 4,
-    backgroundColor: '#F1F1FA',
-    borderRadius: 8,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: '#5B9BD5',
+  specialty: {
+    fontSize: 16,
+    color: '#666',
     fontWeight: '500',
-    marginLeft: 6,
   },
-  priceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+  priceContainer: {
+    alignItems: 'flex-end',
   },
   price: {
+    fontSize: 24,
     fontWeight: '700',
-    fontSize: 20,
-    color: '#222',
-  },
-  availability: {
-    fontWeight: '500',
-    fontSize: 15,
-    marginLeft: 8,
-  },
-  bio: {
-    fontSize: 15,
-    color: '#444',
-    marginBottom: 18,
-    textAlign: 'center',
-  },
-  section: {
-    marginBottom: 18,
-  },
-  sectionTitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#222',
-    marginBottom: 6,
-  },
-  tag: {
-    backgroundColor: '#F1F1FA',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    marginRight: 8,
-    marginBottom: 6,
-  },
-  tagText: {
-    fontSize: 14,
     color: '#5B9BD5',
-    fontWeight: '500',
   },
-  galleryImg: {
-    width: 120,
-    height: 80,
-    borderRadius: 10,
-    marginRight: 10,
-  },
-  reviewBox: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  reviewName: {
-    fontWeight: '600',
-    fontSize: 15,
-    color: '#222',
-  },
-  reviewRating: {
+  priceUnit: {
     fontSize: 14,
+    color: '#666',
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starsContainer: {
+    flexDirection: 'row',
+    marginRight: 8,
+  },
+  ratingText: {
+    fontSize: 16,
+    fontWeight: '600',
     color: '#222',
+    marginRight: 4,
+  },
+  reviewsCount: {
+    fontSize: 14,
+    color: '#666',
+  },
+  verifiedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#E8F5E8',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  verifiedText: {
+    fontSize: 12,
+    color: '#4CAF50',
+    fontWeight: '600',
     marginLeft: 4,
   },
-  reviewText: {
-    fontSize: 14,
-    color: '#444',
+  statsContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#F8F9FB',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
   },
-  bookBtn: {
+  statItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#222',
+    marginTop: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  statDivider: {
+    width: 1,
+    backgroundColor: '#E0E0E0',
+    marginHorizontal: 8,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  primaryButton: {
+    flex: 1,
     backgroundColor: '#5B9BD5',
     borderRadius: 12,
     paddingVertical: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    justifyContent: 'center',
   },
-  bookBtnText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 18,
+  primaryButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
-  modalOverlay: {
+  secondaryButton: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    justifyContent: 'flex-end',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    padding: 24,
-    minHeight: 320,
-  },
-  pickerBtn: {
+    backgroundColor: '#F8F9FB',
+    borderRadius: 12,
+    paddingVertical: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F1F1FA',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 14,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
-  pickerBtnText: {
-    marginLeft: 10,
+  secondaryButtonText: {
+    color: '#5B9BD5',
     fontSize: 16,
-    color: '#222',
-    fontWeight: '500',
+    fontWeight: '600',
+    marginLeft: 8,
   },
-  confirmBtn: {
-    backgroundColor: '#6C63FF',
-    borderRadius: 10,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 10,
+  section: {
+    backgroundColor: 'white',
+    marginTop: 12,
+    padding: 20,
   },
-  confirmBtnText: {
-    color: '#fff',
+  sectionTitle: {
+    fontSize: 20,
     fontWeight: '700',
-    fontSize: 17,
+    color: '#222',
+    marginBottom: 16,
   },
-  cancelBtn: {
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  cancelBtnText: {
-    color: '#888',
-    fontWeight: '500',
+  bioText: {
     fontSize: 16,
+    color: '#444',
+    lineHeight: 24,
   },
-  floatingBookBtn: {
-    position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 24,
-    backgroundColor: '#6C63FF',
-    borderRadius: 16,
-    paddingVertical: 18,
+  detailsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+  },
+  detailItem: {
+    width: (width - 60) / 2,
+    backgroundColor: '#F8F9FB',
+    borderRadius: 12,
+    padding: 16,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
-    zIndex: 10,
   },
-  leaveReviewBtn: {
+  detailLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  detailValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#222',
+    textAlign: 'center',
+  },
+  certificationsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  certificationTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F1F1FA',
-    borderRadius: 8,
+    backgroundColor: '#E8F5E8',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  certificationText: {
+    fontSize: 14,
+    color: '#4CAF50',
+    fontWeight: '500',
+    marginLeft: 6,
+  },
+  galleryContainer: {
+    marginBottom: 8,
+  },
+  galleryImage: {
+    width: 120,
+    height: 80,
+    borderRadius: 12,
+    marginRight: 12,
+  },
+  reviewsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  leaveReviewButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FB',
+    borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   leaveReviewText: {
-    color: '#6C63FF',
-    fontWeight: '600',
-    fontSize: 15,
+    fontSize: 14,
+    color: '#5B9BD5',
+    fontWeight: '500',
     marginLeft: 6,
   },
-  reviewInput: {
-    backgroundColor: '#F1F1FA',
-    borderRadius: 10,
-    padding: 12,
-    fontSize: 16,
-    color: '#222',
-    marginBottom: 14,
-    minHeight: 80,
-    textAlignVertical: 'top',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#eee',
-    borderRadius: 8,
-    padding: 10,
+  reviewCard: {
+    backgroundColor: '#F8F9FB',
+    borderRadius: 12,
+    padding: 16,
     marginBottom: 12,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  reviewName: {
     fontSize: 16,
-    backgroundColor: 'transparent',
+    fontWeight: '600',
+    color: '#222',
+  },
+  reviewRating: {
+    flexDirection: 'row',
+  },
+  reviewText: {
+    fontSize: 14,
+    color: '#444',
+    lineHeight: 20,
+    marginBottom: 8,
+  },
+  reviewDate: {
+    fontSize: 12,
+    color: '#666',
+  },
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+  },
+  floatingButton: {
+    backgroundColor: '#5B9BD5',
+    borderRadius: 12,
+    paddingVertical: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  floatingButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    maxHeight: '80%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   modalTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    marginBottom: 18,
-  },
-  closeModalBtn: {
-    marginTop: 10,
-  },
-  providerName: {
     fontSize: 20,
     fontWeight: '700',
-    marginBottom: 2,
+    color: '#222',
+  },
+  modalBody: {
+    flex: 1,
+  },
+  pickerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FB',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+  },
+  pickerButtonText: {
+    fontSize: 16,
+    color: '#222',
+    marginLeft: 12,
+  },
+  bookingSummary: {
+    backgroundColor: '#F8F9FB',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
+  },
+  summaryTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#222',
+    marginBottom: 12,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  summaryLabel: {
+    fontSize: 14,
+    color: '#666',
+  },
+  summaryValue: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#222',
+  },
+  bookButton: {
+    backgroundColor: '#5B9BD5',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  bookButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  paymentText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  payButton: {
+    backgroundColor: '#5B9BD5',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  payButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  ratingSelector: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  reviewInput: {
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
+    marginBottom: 20,
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  submitReviewButton: {
+    backgroundColor: '#5B9BD5',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  submitReviewButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 }); 
