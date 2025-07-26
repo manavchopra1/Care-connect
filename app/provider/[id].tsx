@@ -181,11 +181,11 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
             <Text style={styles.infoLabel}>{provider.employmentType}</Text>
           </View>
           <View style={styles.infoBox}>
-            <Ionicons name="person-outline" size={18} color="#6C63FF" />
+                            <Ionicons name="person-outline" size={18} color="#5B9BD5" />
             <Text style={styles.infoLabel}>{provider.gender}</Text>
           </View>
           <View style={styles.infoBox}>
-            <Ionicons name="language-outline" size={18} color="#6C63FF" />
+                            <Ionicons name="language-outline" size={18} color="#5B9BD5" />
             <Text style={styles.infoLabel}>{provider.languages.join(', ')}</Text>
           </View>
         </View>
@@ -218,7 +218,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
             <Text style={styles.sectionTitle}>Reviews</Text>
             <TouchableOpacity style={styles.leaveReviewBtn} onPress={() => setReviewModal(true)}>
-              <Ionicons name="create-outline" size={18} color="#6C63FF" />
+                              <Ionicons name="create-outline" size={18} color="#5B9BD5" />
               <Text style={styles.leaveReviewText}>Leave a Review</Text>
             </TouchableOpacity>
           </View>
@@ -255,11 +255,11 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
               <>
                 <Text style={{ fontSize: 20, fontWeight: '700', color: '#222', marginBottom: 18 }}>Book {provider.name}</Text>
                 <TouchableOpacity style={styles.pickerBtn} onPress={() => openPicker('date')}>
-                  <Ionicons name="calendar-outline" size={20} color="#6C63FF" />
+                  <Ionicons name="calendar-outline" size={20} color="#5B9BD5" />
                   <Text style={styles.pickerBtnText}>Select Date: {date.toLocaleDateString()}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.pickerBtn} onPress={() => openPicker('time')}>
-                  <Ionicons name="time-outline" size={20} color="#6C63FF" />
+                  <Ionicons name="time-outline" size={20} color="#5B9BD5" />
                   <Text style={styles.pickerBtnText}>Select Time: {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
                 </TouchableOpacity>
                 {showPicker && (
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 14,
-    color: '#6C63FF',
+    color: '#5B9BD5',
     fontWeight: '500',
     marginLeft: 6,
   },
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
   },
   tagText: {
     fontSize: 14,
-    color: '#6C63FF',
+    color: '#5B9BD5',
     fontWeight: '500',
   },
   galleryImg: {
@@ -495,7 +495,7 @@ const styles = StyleSheet.create({
     color: '#444',
   },
   bookBtn: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#5B9BD5',
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',

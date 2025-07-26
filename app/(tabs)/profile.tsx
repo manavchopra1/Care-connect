@@ -778,7 +778,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   editBtn: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#5B9BD5',
     borderRadius: 8,
     paddingHorizontal: 18,
     paddingVertical: 7,
@@ -902,7 +902,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   bookingBtn: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#5B9BD5',
     borderRadius: 8,
     paddingHorizontal: 14,
     paddingVertical: 7,
@@ -949,7 +949,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   confirmBtn: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#5B9BD5',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 25,

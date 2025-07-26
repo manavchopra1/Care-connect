@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   seeAll: {
-    color: '#6C63FF',
+    color: '#5B9BD5',
     fontWeight: '500',
     fontSize: 15,
   },
@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
   },
   tagText: {
     fontSize: 13,
-    color: '#6C63FF',
+    color: '#5B9BD5',
     fontWeight: '500',
   },
   price: {
