@@ -202,7 +202,7 @@ export default function ProfileScreen() {
         <Text style={[styles.userEmail, { color: '#888' }]}>{editEmail}</Text>
         
         <TouchableOpacity style={styles.editButton} onPress={() => setEditModal(true)}>
-          <Ionicons name="pencil" size={16} color="#3B4D61" />
+          <Ionicons name="pencil" size={16} color="#5B9BD5" />
           <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
@@ -242,7 +242,7 @@ export default function ProfileScreen() {
         ))}
         <TouchableOpacity style={styles.viewAllButton}>
           <Text style={styles.viewAllText}>View All Bookings</Text>
-          <Ionicons name="chevron-forward" size={16} color="#3B4D61" />
+          <Ionicons name="chevron-forward" size={16} color="#5B9BD5" />
         </TouchableOpacity>
       </View>
 
@@ -251,7 +251,7 @@ export default function ProfileScreen() {
         {settings.map((item, idx) => (
           <TouchableOpacity key={item.label} style={styles.settingItem} onPress={item.onPress}>
             <View style={styles.settingIconBox}>
-              <Ionicons name={item.icon} size={22} color="#3B4D61" />
+              <Ionicons name={item.icon} size={22} color="#5B9BD5" />
             </View>
             <Text style={styles.settingLabel}>{item.label}</Text>
             <Ionicons name="chevron-forward" size={20} color="#bbb" style={{ marginLeft: 'auto' }} />
@@ -494,13 +494,13 @@ export default function ProfileScreen() {
                     <Text style={styles.addressText}>Apt 4B, New York, NY 10001</Text>
                   </View>
                   <TouchableOpacity style={styles.editAddressButton}>
-                    <Ionicons name="pencil" size={16} color="#6C63FF" />
+                    <Ionicons name="pencil" size={16} color="#5B9BD5" />
                   </TouchableOpacity>
                 </View>
 
                 {/* Add New Address Button */}
                 <TouchableOpacity style={styles.addAddressButton}>
-                  <Ionicons name="add" size={20} color="#6C63FF" />
+                  <Ionicons name="add" size={20} color="#5B9BD5" />
                   <Text style={styles.addAddressText}>Add New Address</Text>
                 </TouchableOpacity>
               </View>
@@ -573,7 +573,7 @@ export default function ProfileScreen() {
                 {cards.map(card => (
                   <View key={card.id} style={styles.paymentMethodCard}>
                     <View style={styles.paymentMethodInfo}>
-                      <Ionicons name={card.brand === 'Visa' ? 'card-outline' : 'card'} size={24} color="#6C63FF" />
+                      <Ionicons name={card.brand === 'Visa' ? 'card-outline' : 'card'} size={24} color="#5B9BD5" />
                       <Text style={styles.paymentMethodText}>{card.brand} •••• {card.last4}</Text>
                       <Text style={styles.paymentMethodExp}>Expires {card.exp}</Text>
                     </View>
@@ -650,7 +650,7 @@ export default function ProfileScreen() {
                 
                 <View style={styles.notificationOption}>
                   <View style={styles.notificationInfo}>
-                    <Ionicons name="notifications" size={24} color="#6C63FF" />
+                    <Ionicons name="notifications" size={24} color="#5B9BD5" />
                     <View style={styles.notificationTextContainer}>
                       <Text style={styles.notificationText}>Push Notifications</Text>
                       <Text style={styles.notificationSubtext}>Receive alerts on your device</Text>

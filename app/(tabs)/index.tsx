@@ -9,7 +9,7 @@ import { useNotifications } from '../../components/NotificationsContext';
 import { useThemeColor } from '../../hooks/useThemeColor';
 
 const services: { id: string; icon: any; label: string; color: string }[] = [
-  { id: '1', icon: 'medkit-outline', label: 'Medical', color: '#3B4D61' },
+  { id: '1', icon: 'medkit-outline', label: 'Medical', color: '#5B9BD5' },
   { id: '2', icon: 'fitness-outline', label: 'Fitness', color: '#4CAF50' },
   { id: '3', icon: 'restaurant-outline', label: 'Nutrition', color: '#FF9800' },
   { id: '4', icon: 'happy-outline', label: 'Wellness', color: '#E91E63' },
@@ -165,7 +165,7 @@ export default function HomeScreen() {
               />
             </View>
             <TouchableOpacity style={styles.filterBtn} onPress={() => setShowFilter(true)}>
-              <Ionicons name="options-outline" size={22} color="#3B4D61" />
+              <Ionicons name="options-outline" size={22} color="#5B9BD5" />
             </TouchableOpacity>
           </View>
         </Animatable.View>
@@ -193,7 +193,7 @@ export default function HomeScreen() {
         <Animatable.View animation="fadeInUp" duration={600} delay={500}>
           {loading ? (
             <View style={{ alignItems: 'center', marginTop: 32 }}>
-              <ActivityIndicator size="large" color="#3B4D61" />
+              <ActivityIndicator size="large" color="#5B9BD5" />
               {/* Add skeleton cards here if desired */}
             </View>
           ) : filteredProviders.length === 0 ? (
@@ -267,8 +267,8 @@ export default function HomeScreen() {
                   <Switch
                     value={filters.availability}
                     onValueChange={v => setFilters(f => ({ ...f, availability: v }))}
-                    trackColor={{ false: '#ccc', true: '#6C63FF' }}
-                    thumbColor={filters.availability ? '#6C63FF' : '#fff'}
+                              trackColor={{ false: '#ccc', true: '#5B9BD5' }}
+          thumbColor={filters.availability ? '#5B9BD5' : '#fff'}
                   />
                 </View>
               </View>
@@ -279,8 +279,8 @@ export default function HomeScreen() {
                   <Switch
                     value={filters.verified}
                     onValueChange={v => setFilters(f => ({ ...f, verified: v }))}
-                    trackColor={{ false: '#ccc', true: '#6C63FF' }}
-                    thumbColor={filters.verified ? '#6C63FF' : '#fff'}
+                              trackColor={{ false: '#ccc', true: '#5B9BD5' }}
+          thumbColor={filters.verified ? '#5B9BD5' : '#fff'}
                   />
                 </View>
               </View>
@@ -340,7 +340,7 @@ export default function HomeScreen() {
                   step={1}
                   value={filters.priceRange[1]}
                   onValueChange={v => setFilters(f => ({ ...f, priceRange: [f.priceRange[0], v] }))}
-                  minimumTrackTintColor="#6C63FF"
+                  minimumTrackTintColor="#5B9BD5"
                   maximumTrackTintColor="#ccc"
                 />
               </View>

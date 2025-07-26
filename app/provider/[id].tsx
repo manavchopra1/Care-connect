@@ -147,7 +147,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
         <View style={{ flexDirection: 'row', marginVertical: 8, flexWrap: 'wrap' }}>
           {provider.certifications?.map((cert, idx) => (
             <View key={idx} style={{ backgroundColor: '#E0E0E0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4, marginRight: 8, marginBottom: 6 }}>
-              <Text style={{ color: '#6C63FF', fontWeight: '600' }}>{cert}</Text>
+                              <Text style={{ color: '#5B9BD5', fontWeight: '600' }}>{cert}</Text>
             </View>
           ))}
           {provider.specialties?.map((spec, idx) => (
@@ -162,11 +162,11 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
           ))}
         </View>
         <View style={{ flexDirection: 'row', marginTop: 12 }}>
-          <TouchableOpacity style={{ backgroundColor: '#6C63FF', borderRadius: 10, paddingVertical: 12, paddingHorizontal: 20, marginRight: 12 }} onPress={handleContact}>
+                          <TouchableOpacity style={{ backgroundColor: '#5B9BD5', borderRadius: 10, paddingVertical: 12, paddingHorizontal: 20, marginRight: 12 }} onPress={handleContact}>
             <Text style={{ color: '#fff', fontWeight: '600', fontSize: 16 }}>Contact Provider</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{ backgroundColor: '#F1F1FA', borderRadius: 10, paddingVertical: 12, paddingHorizontal: 20 }} onPress={handleShare}>
-            <Text style={{ color: '#6C63FF', fontWeight: '600', fontSize: 16 }}>Share Profile</Text>
+                          <Text style={{ color: '#5B9BD5', fontWeight: '600', fontSize: 16 }}>Share Profile</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
@@ -177,7 +177,7 @@ export default function ProviderDetailScreen({ route, navigation }: any) {
         </View>
         <View style={styles.infoRow}>
           <View style={styles.infoBox}>
-            <Ionicons name="briefcase-outline" size={18} color="#6C63FF" />
+                            <Ionicons name="briefcase-outline" size={18} color="#5B9BD5" />
             <Text style={styles.infoLabel}>{provider.employmentType}</Text>
           </View>
           <View style={styles.infoBox}>
