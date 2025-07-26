@@ -5,6 +5,7 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import { useThemeColor } from '../../hooks/useThemeColor';
 
 const categories = [
+  // Healthcare & Medical Services
   {
     id: 1,
     title: 'Full-Time Nurse / Caregiver',
@@ -13,6 +14,7 @@ const categories = [
     color: '#E74C3C',
     providers: 38,
     rating: 4.9,
+    group: 'Healthcare & Medical',
   },
   {
     id: 2,
@@ -22,6 +24,7 @@ const categories = [
     color: '#3498DB',
     providers: 42,
     rating: 4.7,
+    group: 'Healthcare & Medical',
   },
   {
     id: 3,
@@ -31,106 +34,121 @@ const categories = [
     color: '#2ECC71',
     providers: 25,
     rating: 4.8,
+    group: 'Healthcare & Medical',
   },
   {
     id: 4,
-    title: 'Physiotherapy at Home',
-    description: 'Especially useful for post-surgery recovery, arthritis, or age-related mobility issues.',
-    icon: 'fitness',
-    color: '#4CAF50',
-    providers: 45,
-    rating: 4.8,
-  },
-  {
-    id: 5,
-    title: 'Doctor/Home Visit Consultations',
-    description: 'General physicians or specialists who can visit patients at home.',
-    icon: 'medical',
-    color: '#2196F3',
-    providers: 32,
-    rating: 4.9,
-  },
-  {
-    id: 6,
-    title: 'Diagnostic Lab Tests at Home',
-    description: 'Blood tests, ECG, urine tests — partner with local labs for sample collection.',
-    icon: 'flask',
-    color: '#FF9800',
-    providers: 28,
-    rating: 4.7,
-  },
-  {
-    id: 7,
-    title: 'Medication Delivery and Reminders',
-    description: 'Timely medicine delivery and app-based alerts for taking medications.',
-    icon: 'medical-outline',
-    color: '#9C27B0',
-    providers: 15,
-    rating: 4.6,
-  },
-  {
-    id: 8,
     title: 'Palliative Care Expert',
     description: 'For terminally ill patients, focused on pain and emotional care.',
     icon: 'heart',
     color: '#8E44AD',
     providers: 18,
     rating: 4.9,
+    group: 'Healthcare & Medical',
   },
   {
-    id: 9,
+    id: 5,
     title: 'Dementia / Alzheimer\'s Specialist Caregiver',
     description: 'Trained in mental health and behavioral support.',
     icon: 'medical',
     color: '#F39C12',
     providers: 22,
     rating: 4.8,
+    group: 'Healthcare & Medical',
   },
   {
-    id: 10,
-    title: 'Child Care Nanny / Full-Time Aaya',
-    description: 'Infants and toddlers — diapering, feeding, playing, etc.',
-    icon: 'people',
-    color: '#E67E22',
-    providers: 35,
-    rating: 4.7,
-  },
-  {
-    id: 11,
-    title: 'Postpartum Mother & Baby Care (Japa Maid)',
-    description: 'Traditional Indian support for recovery & newborn care.',
-    icon: 'female',
-    color: '#E91E63',
-    providers: 28,
-    rating: 4.8,
-  },
-  {
-    id: 12,
-    title: 'Cooking & Meal Preparation',
-    description: 'Home-cooked meals, dietary restrictions, meal planning, and kitchen assistance.',
-    icon: 'restaurant',
-    color: '#FF6B35',
-    providers: 31,
-    rating: 4.7,
-  },
-  {
-    id: 13,
-    title: 'House Maid / Domestic Help',
-    description: 'Cleaning, laundry, general household chores, and home maintenance.',
-    icon: 'home',
-    color: '#4ECDC4',
-    providers: 45,
-    rating: 4.6,
-  },
-  {
-    id: 14,
+    id: 6,
     title: 'Mental Health Services',
     description: 'Trained companions, therapists, or even video calls for mental wellness.',
     icon: 'heart',
     color: '#E91E63',
     providers: 23,
     rating: 4.8,
+    group: 'Healthcare & Medical',
   },
+  {
+    id: 7,
+    title: 'Physiotherapy at Home',
+    description: 'Especially useful for post-surgery recovery, arthritis, or age-related mobility issues.',
+    icon: 'fitness',
+    color: '#4CAF50',
+    providers: 45,
+    rating: 4.8,
+    group: 'Healthcare & Medical',
+  },
+  {
+    id: 8,
+    title: 'Doctor/Home Visit Consultations',
+    description: 'General physicians or specialists who can visit patients at home.',
+    icon: 'medical',
+    color: '#2196F3',
+    providers: 32,
+    rating: 4.9,
+    group: 'Healthcare & Medical',
+  },
+  {
+    id: 9,
+    title: 'Diagnostic Lab Tests at Home',
+    description: 'Blood tests, ECG, urine tests — partner with local labs for sample collection.',
+    icon: 'flask',
+    color: '#FF9800',
+    providers: 28,
+    rating: 4.7,
+    group: 'Healthcare & Medical',
+  },
+  {
+    id: 10,
+    title: 'Medication Delivery and Reminders',
+    description: 'Timely medicine delivery and app-based alerts for taking medications.',
+    icon: 'medical-outline',
+    color: '#9C27B0',
+    providers: 15,
+    rating: 4.6,
+    group: 'Healthcare & Medical',
+  },
+  // Child & Family Care
+  {
+    id: 11,
+    title: 'Child Care Nanny / Full-Time Aaya',
+    description: 'Infants and toddlers — diapering, feeding, playing, etc.',
+    icon: 'people',
+    color: '#E67E22',
+    providers: 35,
+    rating: 4.7,
+    group: 'Child & Family Care',
+  },
+  {
+    id: 12,
+    title: 'Postpartum Mother & Baby Care (Japa Maid)',
+    description: 'Traditional Indian support for recovery & newborn care.',
+    icon: 'female',
+    color: '#E91E63',
+    providers: 28,
+    rating: 4.8,
+    group: 'Child & Family Care',
+  },
+  // Domestic Services
+  {
+    id: 13,
+    title: 'Cooking & Meal Preparation',
+    description: 'Home-cooked meals, dietary restrictions, meal planning, and kitchen assistance.',
+    icon: 'restaurant',
+    color: '#FF6B35',
+    providers: 31,
+    rating: 4.7,
+    group: 'Domestic Services',
+  },
+  {
+    id: 14,
+    title: 'House Maid / Domestic Help',
+    description: 'Cleaning, laundry, general household chores, and home maintenance.',
+    icon: 'home',
+    color: '#4ECDC4',
+    providers: 45,
+    rating: 4.6,
+    group: 'Domestic Services',
+  },
+  // Specialized Support
   {
     id: 15,
     title: 'Religious and Spiritual Support',
@@ -139,6 +157,7 @@ const categories = [
     color: '#FFC107',
     providers: 12,
     rating: 4.5,
+    group: 'Specialized Support',
   },
   {
     id: 16,
@@ -148,6 +167,7 @@ const categories = [
     color: '#795548',
     providers: 18,
     rating: 4.7,
+    group: 'Specialized Support',
   },
 ];
 
@@ -156,6 +176,15 @@ export default function CategoriesScreen() {
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const cardColor = useThemeColor({}, 'card');
+
+  // Group categories by their group property
+  const groupedCategories = categories.reduce((acc, category) => {
+    if (!acc[category.group]) {
+      acc[category.group] = [];
+    }
+    acc[category.group].push(category);
+    return acc;
+  }, {} as Record<string, typeof categories>);
 
   const renderCategory = ({ item }: { item: any }) => (
     <TouchableOpacity
@@ -186,19 +215,34 @@ export default function CategoriesScreen() {
     </TouchableOpacity>
   );
 
+  const renderSection = ({ item }: { item: { group: string; categories: any[] } }) => (
+    <View style={styles.section}>
+      <Text style={[styles.sectionTitle, { color: textColor }]}>{item.group}</Text>
+      {item.categories.map((category) => (
+        <View key={category.id}>
+          {renderCategory({ item: category })}
+        </View>
+      ))}
+    </View>
+  );
+
+  const sections = Object.entries(groupedCategories).map(([group, categories]) => ({
+    group,
+    categories,
+  }));
+
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      {/* Categories List */}
       <FlatList
-        data={categories}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderCategory}
+        data={sections}
+        keyExtractor={(item) => item.group}
+        renderItem={renderSection}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
         ListHeaderComponent={() => (
           <View style={styles.header}>
-            <Text style={[styles.headerTitle, { color: textColor }]}>Service Categories</Text>
-            <Text style={styles.headerSubtitle}>Choose from our comprehensive range of home healthcare services</Text>
+            <Text style={[styles.headerTitle, { color: textColor }]}>Care Connect Services</Text>
+            <Text style={styles.headerSubtitle}>Comprehensive home healthcare and domestic services</Text>
           </View>
         )}
       />
@@ -275,5 +319,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginLeft: 6,
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 16,
+    marginTop: 8,
   },
 });
