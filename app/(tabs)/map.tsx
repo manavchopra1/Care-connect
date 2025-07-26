@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
     color: '#4CAF50',
   },
   calloutButton: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#3B4D61',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   bookButton: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#3B4D61',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',

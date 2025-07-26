@@ -202,7 +202,7 @@ export default function ProfileScreen() {
         <Text style={[styles.userEmail, { color: '#888' }]}>{editEmail}</Text>
         
         <TouchableOpacity style={styles.editButton} onPress={() => setEditModal(true)}>
-          <Ionicons name="pencil" size={16} color="#6C63FF" />
+          <Ionicons name="pencil" size={16} color="#3B4D61" />
           <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
@@ -242,7 +242,7 @@ export default function ProfileScreen() {
         ))}
         <TouchableOpacity style={styles.viewAllButton}>
           <Text style={styles.viewAllText}>View All Bookings</Text>
-          <Ionicons name="chevron-forward" size={16} color="#6C63FF" />
+          <Ionicons name="chevron-forward" size={16} color="#3B4D61" />
         </TouchableOpacity>
       </View>
 
@@ -251,7 +251,7 @@ export default function ProfileScreen() {
         {settings.map((item, idx) => (
           <TouchableOpacity key={item.label} style={styles.settingItem} onPress={item.onPress}>
             <View style={styles.settingIconBox}>
-              <Ionicons name={item.icon} size={22} color="#6C63FF" />
+              <Ionicons name={item.icon} size={22} color="#3B4D61" />
             </View>
             <Text style={styles.settingLabel}>{item.label}</Text>
             <Ionicons name="chevron-forward" size={20} color="#bbb" style={{ marginLeft: 'auto' }} />

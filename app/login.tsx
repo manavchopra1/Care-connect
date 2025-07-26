@@ -164,12 +164,12 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   forgotText: {
-    color: '#6C63FF',
+    color: '#3B4D61',
     fontWeight: '500',
     fontSize: 15,
   },
   loginBtn: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#3B4D61',
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   signupLink: {
-    color: '#6C63FF',
+    color: '#3B4D61',
     fontWeight: '600',
     fontSize: 15,
   },
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   confirmBtn: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#3B4D61',
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',

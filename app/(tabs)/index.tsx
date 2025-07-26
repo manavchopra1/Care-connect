@@ -9,7 +9,7 @@ import { useNotifications } from '../../components/NotificationsContext';
 import { useThemeColor } from '../../hooks/useThemeColor';
 
 const services: { id: string; icon: any; label: string; color: string }[] = [
-  { id: '1', icon: 'medkit-outline', label: 'Medical', color: '#6C63FF' },
+  { id: '1', icon: 'medkit-outline', label: 'Medical', color: '#3B4D61' },
   { id: '2', icon: 'fitness-outline', label: 'Fitness', color: '#4CAF50' },
   { id: '3', icon: 'restaurant-outline', label: 'Nutrition', color: '#FF9800' },
   { id: '4', icon: 'happy-outline', label: 'Wellness', color: '#E91E63' },
@@ -165,7 +165,7 @@ export default function HomeScreen() {
               />
             </View>
             <TouchableOpacity style={styles.filterBtn} onPress={() => setShowFilter(true)}>
-              <Ionicons name="options-outline" size={22} color="#6C63FF" />
+              <Ionicons name="options-outline" size={22} color="#3B4D61" />
             </TouchableOpacity>
           </View>
         </Animatable.View>
@@ -193,7 +193,7 @@ export default function HomeScreen() {
         <Animatable.View animation="fadeInUp" duration={600} delay={500}>
           {loading ? (
             <View style={{ alignItems: 'center', marginTop: 32 }}>
-              <ActivityIndicator size="large" color="#6C63FF" />
+              <ActivityIndicator size="large" color="#3B4D61" />
               {/* Add skeleton cards here if desired */}
             </View>
           ) : filteredProviders.length === 0 ? (
